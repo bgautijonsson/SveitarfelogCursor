@@ -38,7 +38,7 @@ function App() {
   const [selectedVariable, setSelectedVariable] = useState('Nettóskuldir sem hlutfall af tekjum');
 
   useEffect(() => {
-    Papa.parse('/data/throun_data.csv', {
+    Papa.parse('./data/throun_data.csv', {
       download: true,
       header: true,
       dynamicTyping: true,

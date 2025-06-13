@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 3000
   },
-  base: './',
+  base: '/SveitarfelogCursor/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
