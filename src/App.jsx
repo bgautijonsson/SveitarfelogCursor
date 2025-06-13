@@ -90,6 +90,9 @@ function App() {
       d.name === selectedVariable
     );
 
+    // Check if the current variable is a percentage
+    const isPercentage = filteredData.length > 0 && filteredData[0].is_percent;
+
     // Light theme color palette that matches your website
     const colors = [
       'hsla(232, 20%, 35%, 1)', // Your primary color
@@ -127,10 +130,21 @@ function App() {
         hovertemplate: 
           '<b>%{fullData.name}</b><br>' +
           'Ár: %{x}<br>' +
-          'Gildi: %{y:.2f}<br>' +
+          'Gildi: ' + (isPercentage ? '%{y:.1f}%' : '%{y:.2f}') + '<br>' +
           '<extra></extra>'
       };
     });
+  };
+
+  const getCurrentVariableData = () => {
+    if (!data.length || !selectedPart || !selectedVariable) return null;
+    
+    const sample = data.find(d => 
+      d.hluti === selectedPart &&
+      d.name === selectedVariable
+    );
+    
+    return sample;
   };
 
   if (loading) {
@@ -310,7 +324,10 @@ function App() {
                   },
                   yaxis: {
                     title: {
-                      text: 'Gildi',
+                      text: (() => {
+                        const currentData = getCurrentVariableData();
+                        return currentData && currentData.is_percent ? 'Prósenta (%)' : 'Gildi';
+                      })(),
                       font: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
                     },
                     showgrid: true,
@@ -319,7 +336,15 @@ function App() {
                     zerolinecolor: 'hsla(0, 0%, 70%, 1)',
                     zerolinewidth: 2,
                     color: 'hsla(232, 20%, 35%, 1)',
-                    tickfont: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
+                    tickfont: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' },
+                    tickformat: (() => {
+                      const currentData = getCurrentVariableData();
+                      return currentData && currentData.is_percent ? '.1f' : '.2f';
+                    })(),
+                    ticksuffix: (() => {
+                      const currentData = getCurrentVariableData();
+                      return currentData && currentData.is_percent ? '%' : '';
+                    })()
                   },
                   hovermode: 'closest',
                   showlegend: true,
