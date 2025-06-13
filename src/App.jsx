@@ -12,8 +12,8 @@ import {
   Fade,
   LinearProgress,
   Alert,
-  IconButton,
-  Tooltip
+  Card,
+  CardContent
 } from '@mui/material';
 import { Timeline, BarChart, TrendingUp } from '@mui/icons-material';
 import Plot from 'react-plotly.js';
@@ -93,23 +93,25 @@ function App() {
     // Check if the current variable is a percentage
     const isPercentage = filteredData.length > 0 && filteredData[0].is_percent;
 
-    // Light theme color palette that matches your website
+    // Clean, professional color palette based on theme
     const colors = [
-      'hsla(232, 20%, 35%, 1)', // Your primary color
-      'hsla(192, 100%, 33%, 1)', // Your success color
+      'hsla(232, 20%, 35%, 1)', // Primary
+      'hsla(192, 100%, 33%, 1)', // Success
       'hsla(280, 70%, 45%, 1)', // Purple
       'hsla(25, 95%, 53%, 1)', // Orange
       'hsla(348, 83%, 47%, 1)', // Red
       'hsla(142, 71%, 45%, 1)', // Green
       'hsla(45, 93%, 47%, 1)', // Yellow
-      'hsla(262, 83%, 58%, 1)' // Violet
+      'hsla(210, 70%, 50%, 1)', // Blue
+      'hsla(320, 65%, 52%, 1)', // Magenta
+      'hsla(160, 60%, 45%, 1)'  // Teal
     ];
 
     return selectedCounties.map((county, index) => {
       const countyData = filteredData.filter(d => d.sveitarfelag === county);
       return {
         x: countyData.map(d => d.ar),
-        y: countyData.map(d => d.y),
+        y: countyData.map(d => isPercentage ? d.y * 100 : d.y),
         type: 'scatter',
         mode: 'lines+markers',
         name: county,
@@ -119,7 +121,7 @@ function App() {
           color: colors[index % colors.length]
         },
         marker: {
-          size: 7,
+          size: 6,
           symbol: 'circle',
           color: colors[index % colors.length],
           line: {
@@ -155,19 +157,21 @@ function App() {
         alignItems: 'center', 
         justifyContent: 'center', 
         height: '100vh',
-        gap: 2,
-        backgroundColor: 'background.default'
+        gap: 3,
+        backgroundColor: 'hsla(0, 9%, 98%, 1)'
       }}>
-        <TrendingUp sx={{ fontSize: 48, color: 'primary.main' }} />
-        <Typography variant="h6" sx={{ fontFamily: '"Lato", sans-serif' }}>Hleð gögnum...</Typography>
-        <LinearProgress sx={{ width: 300 }} />
+        <TrendingUp sx={{ fontSize: 48, color: 'hsla(232, 20%, 35%, 1)' }} />
+        <Typography variant="h6" sx={{ fontFamily: '"Lato", sans-serif', color: 'hsla(232, 20%, 35%, 1)' }}>
+          Hleð gögnum...
+        </Typography>
+        <LinearProgress sx={{ width: 300, '& .MuiLinearProgress-bar': { backgroundColor: 'hsla(192, 100%, 33%, 1)' } }} />
       </Box>
     );
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 4, backgroundColor: 'background.default', minHeight: '100vh' }}>
+      <Box sx={{ p: 4, backgroundColor: 'hsla(0, 9%, 98%, 1)', minHeight: '100vh' }}>
         <Alert severity="error" sx={{ maxWidth: 600, mx: 'auto' }}>
           {error}
         </Alert>
@@ -178,7 +182,7 @@ function App() {
   const drawerWidth = 320;
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'background.default' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'hsla(0, 9%, 98%, 1)' }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -187,25 +191,32 @@ function App() {
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
+            backgroundColor: '#ffffff',
+            borderRight: '1px solid rgba(0,0,0,0.08)'
           },
         }}
       >
         <Box sx={{ p: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 4 }}>
-            <Timeline sx={{ color: 'primary.main', fontSize: 28 }} />
-            <Typography variant="h6">
-              Valmynd
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+            <Timeline sx={{ color: 'hsla(232, 20%, 35%, 1)', fontSize: 32 }} />
+            <Typography variant="h5" sx={{ 
+              fontFamily: '"Playfair Display", serif',
+              color: 'hsla(232, 20%, 35%, 1)',
+              fontWeight: 600
+            }}>
+              Fjármáladashboard
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <FormControl fullWidth>
-              <InputLabel>Sveitarfélög</InputLabel>
+              <InputLabel sx={{ fontFamily: '"Lato", sans-serif' }}>Sveitarfélög</InputLabel>
               <Select
                 multiple
                 value={selectedCounties}
                 onChange={(e) => setSelectedCounties(e.target.value)}
                 label="Sveitarfélög"
+                sx={{ fontFamily: '"Lato", sans-serif' }}
                 renderValue={(selected) => (
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                     {selected.map((value) => (
@@ -213,18 +224,18 @@ function App() {
                         key={value} 
                         label={value.length > 15 ? value.substring(0, 15) + '...' : value}
                         size="small"
+                        sx={{
+                          backgroundColor: 'hsla(192, 100%, 33%, 1)',
+                          color: 'white',
+                          fontFamily: '"Lato", sans-serif'
+                        }}
                       />
                     ))}
                   </Box>
                 )}
-                sx={{
-                  '& .MuiSelect-select': {
-                    minHeight: '56px'
-                  }
-                }}
               >
                 {counties.map((county) => (
-                  <MenuItem key={county} value={county}>
+                  <MenuItem key={county} value={county} sx={{ fontFamily: '"Lato", sans-serif' }}>
                     {county}
                   </MenuItem>
                 ))}
@@ -232,14 +243,15 @@ function App() {
             </FormControl>
 
             <FormControl fullWidth>
-              <InputLabel>Hluti</InputLabel>
+              <InputLabel sx={{ fontFamily: '"Lato", sans-serif' }}>Hluti</InputLabel>
               <Select
                 value={selectedPart}
                 onChange={(e) => setSelectedPart(e.target.value)}
                 label="Hluti"
+                sx={{ fontFamily: '"Lato", sans-serif' }}
               >
                 {parts.map((part) => (
-                  <MenuItem key={part} value={part}>
+                  <MenuItem key={part} value={part} sx={{ fontFamily: '"Lato", sans-serif' }}>
                     {part}
                   </MenuItem>
                 ))}
@@ -247,17 +259,19 @@ function App() {
             </FormControl>
 
             <FormControl fullWidth>
-              <InputLabel>Mælikvarði</InputLabel>
+              <InputLabel sx={{ fontFamily: '"Lato", sans-serif' }}>Mælikvarði</InputLabel>
               <Select
                 value={selectedVariable}
                 onChange={(e) => setSelectedVariable(e.target.value)}
                 label="Mælikvarði"
+                sx={{ fontFamily: '"Lato", sans-serif' }}
               >
                 {variables.map((variable) => (
-                  <MenuItem key={variable} value={variable}>
+                  <MenuItem key={variable} value={variable} sx={{ fontFamily: '"Lato", sans-serif' }}>
                     <Typography variant="body2" sx={{ 
                       whiteSpace: 'normal',
-                      wordWrap: 'break-word'
+                      wordWrap: 'break-word',
+                      fontFamily: '"Lato", sans-serif'
                     }}>
                       {variable}
                     </Typography>
@@ -267,17 +281,30 @@ function App() {
             </FormControl>
           </Box>
 
-          <Paper sx={{ mt: 4, p: 2, backgroundColor: 'rgba(135, 139, 168, 0.08)' }}>
-            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
-              Yfirlit
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.primary' }}>
-              {selectedCounties.length} sveitarfélög valin
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.primary' }}>
-              Sýni: {selectedVariable}
-            </Typography>
-          </Paper>
+          <Card sx={{ mt: 4, backgroundColor: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ 
+                color: 'hsla(232, 20%, 35%, 1)',
+                fontFamily: '"Lato", sans-serif',
+                mb: 2
+              }}>
+                Yfirlit
+              </Typography>
+              <Typography variant="body2" sx={{ 
+                color: 'hsla(232, 20%, 35%, 1)',
+                fontFamily: '"Lato", sans-serif',
+                mb: 1
+              }}>
+                {selectedCounties.length} sveitarfélög valin
+              </Typography>
+              <Typography variant="body2" sx={{ 
+                color: 'hsla(232, 20%, 35%, 1)',
+                fontFamily: '"Lato", sans-serif'
+              }}>
+                Mælikvarði: {selectedVariable.length > 30 ? selectedVariable.substring(0, 30) + '...' : selectedVariable}
+              </Typography>
+            </CardContent>
+          </Card>
         </Box>
       </Drawer>
 
@@ -285,42 +312,50 @@ function App() {
         component="main"
         sx={{
           flexGrow: 1,
-          backgroundColor: 'background.default',
+          backgroundColor: 'hsla(0, 9%, 98%, 1)',
           minHeight: '100vh'
         }}
       >
-        <Fade in={!loading} timeout={800}>
+        <Fade in={!loading} timeout={500}>
           <Box sx={{ p: 4 }}>
             <Paper 
-              elevation={2}
+              elevation={1}
               sx={{ 
                 p: 4,
                 borderRadius: 2,
+                backgroundColor: '#ffffff',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.08)'
               }}
             >
+              <Typography variant="h4" sx={{ 
+                fontFamily: '"Playfair Display", serif',
+                color: 'hsla(232, 20%, 35%, 1)',
+                mb: 3,
+                fontWeight: 600
+              }}>
+                {selectedVariable}
+              </Typography>
+              
               <Plot
                 data={getPlotData()}
                 layout={{
-                  title: {
-                    text: selectedVariable,
-                    font: { 
-                      size: 20, 
-                      color: 'hsla(232, 20%, 35%, 1)',
-                      family: '"Playfair Display", serif'
-                    },
-                    x: 0.5,
-                    xanchor: 'center'
-                  },
                   xaxis: {
                     title: {
                       text: 'Ár',
-                      font: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
+                      font: { 
+                        color: 'hsla(232, 20%, 35%, 1)', 
+                        family: '"Lato", sans-serif',
+                        size: 14
+                      }
                     },
                     showgrid: true,
-                    gridcolor: 'hsla(0, 0%, 85%, 1)',
+                    gridcolor: 'rgba(0,0,0,0.1)',
                     zeroline: false,
                     color: 'hsla(232, 20%, 35%, 1)',
-                    tickfont: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
+                    tickfont: { 
+                      color: 'hsla(232, 20%, 35%, 1)', 
+                      family: '"Lato", sans-serif'
+                    }
                   },
                   yaxis: {
                     title: {
@@ -328,15 +363,22 @@ function App() {
                         const currentData = getCurrentVariableData();
                         return currentData && currentData.is_percent ? 'Prósenta (%)' : 'Gildi';
                       })(),
-                      font: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
+                      font: { 
+                        color: 'hsla(232, 20%, 35%, 1)', 
+                        family: '"Lato", sans-serif',
+                        size: 14
+                      }
                     },
                     showgrid: true,
-                    gridcolor: 'hsla(0, 0%, 85%, 1)',
+                    gridcolor: 'rgba(0,0,0,0.1)',
                     zeroline: true,
-                    zerolinecolor: 'hsla(0, 0%, 70%, 1)',
-                    zerolinewidth: 2,
+                    zerolinecolor: 'rgba(0,0,0,0.3)',
+                    zerolinewidth: 1,
                     color: 'hsla(232, 20%, 35%, 1)',
-                    tickfont: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' },
+                    tickfont: { 
+                      color: 'hsla(232, 20%, 35%, 1)', 
+                      family: '"Lato", sans-serif'
+                    },
                     tickformat: (() => {
                       const currentData = getCurrentVariableData();
                       return currentData && currentData.is_percent ? '.1f' : '.2f';
@@ -369,11 +411,14 @@ function App() {
                     xanchor: 'right',
                     y: 1,
                     bgcolor: 'rgba(255, 255, 255, 0.9)',
-                    bordercolor: 'hsla(0, 0%, 85%, 1)',
+                    bordercolor: 'rgba(0,0,0,0.1)',
                     borderwidth: 1,
-                    font: { color: 'hsla(232, 20%, 35%, 1)', family: '"Lato", sans-serif' }
+                    font: { 
+                      color: 'hsla(232, 20%, 35%, 1)', 
+                      family: '"Lato", sans-serif'
+                    }
                   },
-                  margin: { t: 60, r: 50, b: 60, l: 60 },
+                  margin: { t: 60, r: 50, b: 60, l: 80 },
                   plot_bgcolor: '#ffffff',
                   paper_bgcolor: '#ffffff',
                   font: {
@@ -389,7 +434,7 @@ function App() {
                   modeBarButtonsToRemove: ['lasso2d', 'select2d'],
                   toImageButtonOptions: {
                     format: 'png',
-                    filename: 'sveitarfelog-gogn',
+                    filename: 'sveitarfelog-dashboard',
                     height: 600,
                     width: 1200,
                     scale: 1
