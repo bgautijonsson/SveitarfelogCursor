@@ -348,6 +348,22 @@ function App() {
                   },
                   hovermode: 'closest',
                   showlegend: true,
+                  shapes: [
+                    {
+                      type: 'line',
+                      x0: 0,
+                      y0: 0,
+                      x1: 1,
+                      y1: 0,
+                      xref: 'paper',
+                      yref: 'y',
+                      line: {
+                        color: 'rgba(0, 0, 0, 0.3)',
+                        width: 1,
+                        dash: 'dot'
+                      }
+                    }
+                  ],
                   legend: {
                     x: 1,
                     xanchor: 'right',
