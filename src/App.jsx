@@ -121,7 +121,7 @@ function App() {
           color: colors[index % colors.length]
         },
         marker: {
-          size: 6,
+          size: 10,
           symbol: 'circle',
           color: colors[index % colors.length],
           line: {
