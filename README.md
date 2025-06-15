@@ -14,14 +14,14 @@ A modern, interactive dashboard for visualizing financial data from Icelandic mu
 
 ## Live Demo
 
-[View the dashboard](https://yourusername.github.io/Sveitarfelog) (replace with your GitHub username)
+[View the dashboard](https://yourusername.github.io/SveitarfelogCursor) (replace with your GitHub username)
 
 ## Local Development
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Sveitarfelog.git
-cd Sveitarfelog
+git clone https://github.com/yourusername/SveitarfelogCursor.git
+cd SveitarfelogCursor
 ```
 
 2. Install dependencies:
@@ -44,7 +44,7 @@ This project is configured for automatic deployment to GitHub Pages using GitHub
 
 1. Push your code to the `main` branch
 2. GitHub Actions will automatically build and deploy the site
-3. Your dashboard will be available at `https://yourusername.github.io/Sveitarfelog`
+3. Your dashboard will be available at `https://yourusername.github.io/SveitarfelogCursor`
 
 ### Manual Deployment
 
@@ -76,7 +76,7 @@ The dashboard expects CSV data with the following columns:
 ## Project Structure
 
 ```
-Sveitarfelog/
+SveitarfelogCursor/
 ├── public/
 │   └── data/
 │       └── throun_data.csv    # Financial data
